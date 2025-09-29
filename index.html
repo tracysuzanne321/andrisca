@@ -99,9 +99,16 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <img src="aps - logo .svg" alt="Andrisca Property Services" class="logo-image">
+                <a href="index.html">
+                    <img src="aps - logo .svg" alt="Andrisca Property Services" class="logo-image">
+                </a>
             </div>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="nav-menu">
+                <!-- <li class="nav-item nav-close">
+                    <button class="nav-close-btn" id="nav-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </li> -->
                 <li class="nav-item">
                     <a href="#home" class="nav-link">Home</a>
                 </li>
@@ -112,7 +119,16 @@
                     <a href="#about" class="nav-link">About</a>
                 </li>
                 <li class="nav-item">
+                    <a href="#showcase" class="nav-link">Our Work</a>
+                </li>
+                <li class="nav-item">
                     <a href="#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item nav-phone">
+                    <a href="tel:07896882014" class="nav-phone-link">
+                        <i class="fas fa-phone"></i>
+                        <span>07896 882014</span>
+                    </a>
                 </li>
             </ul>
             <div class="hamburger">
@@ -166,7 +182,7 @@
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls poster="bathroom-poster.jpg" preload="metadata">
+                    <video controls preload="metadata">
                         <source src="Orangry Extension.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -176,7 +192,7 @@
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls poster="garage-poster.jpg" preload="metadata">
+                    <video controls preload="metadata">
                         <source src="Conservatory.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -186,7 +202,7 @@
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls poster="extension-poster.jpg" preload="metadata">
+                    <video controls preload="metadata">
                         <source src="Garage.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -196,7 +212,7 @@
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls poster="plastering-poster.jpg" preload="metadata">
+                    <video controls preload="metadata">
                         <source src="videos/plastering-work.mp4" type="video/mp4">
                         <source src="videos/plastering-work.webm" type="video/webm">
                         Your browser does not support the video tag.
@@ -207,7 +223,7 @@
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls poster="building-poster.jpg" preload="metadata">
+                    <video controls preload="metadata">
                         <source src="videos/general-building.mp4" type="video/mp4">
                         <source src="videos/general-building.webm" type="video/webm">
                         Your browser does not support the video tag.
@@ -273,7 +289,7 @@
                 </div>
                 <div class="service-card">
                     <div class="service-icon">
-                        <i class="fas fa-trowel"></i>
+                        <i class="fas fa-tools"></i>
                     </div>
                     <h3>Plastering Shropshire</h3>
                     <p>Professional plastering services across Shropshire for walls, ceilings, and decorative finishes.</p>
@@ -325,9 +341,7 @@
                     </div>
                 </div>
                 <div class="about-image">
-                    <div class="about-placeholder">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <img src="bathroom.jpg" alt="Bathroom renovation work" class="about-photo">
                 </div>
             </div>
         </div>
@@ -346,7 +360,14 @@
                         <i class="fas fa-phone"></i>
                         <div>
                             <h4>Phone</h4>
-                            <p>Call us for immediate assistance</p>
+                            <p><a href="tel:07896882014">07896 882014</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <p><a href="https://wa.me/447896882014" target="_blank" rel="noopener">Send us a message</a></p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -401,6 +422,11 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
+                    <div class="footer-logo">
+                        <a href="index.html">
+                            <img src="aps - logo .svg" alt="Andrisca Property Services" class="footer-logo-image">
+                        </a>
+                    </div>
                     <h3>Andrisca Property Services</h3>
                     <p>Professional building services in Shropshire with 35+ years of experience. Trusted by homeowners across Shropshire.</p>
                 </div>
@@ -415,9 +441,31 @@
                 </div>
                 <div class="footer-section">
                     <h4>Contact Info</h4>
-                    <p><i class="fas fa-phone"></i> Call for Quote</p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:07896882014">07896 882014</a></p>
+                    <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/447896882014" target="_blank" rel="noopener">WhatsApp</a></p>
                     <p><i class="fas fa-envelope"></i> Email Us</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Local Area</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Shropshire</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="cookie-policy.html">Cookie Policy</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/andriscaPropertyServices" target="_blank" rel="noopener" class="social-link facebook">
+                            <i class="fab fa-facebook-f"></i>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/andriscapropertyservicesltd/" target="_blank" rel="noopener" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -425,6 +473,67 @@
             </div>
         </div>
     </footer>
+
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h4>🍪 We use cookies</h4>
+                <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By continuing to use our site, you consent to our use of cookies.</p>
+            </div>
+            <div class="cookie-buttons">
+                <button id="accept-cookies" class="cookie-btn cookie-accept">Accept All</button>
+                <button id="reject-cookies" class="cookie-btn cookie-reject">Reject</button>
+                <button id="cookie-settings" class="cookie-btn cookie-settings">Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div id="cookie-modal" class="cookie-modal">
+        <div class="cookie-modal-content">
+            <div class="cookie-modal-header">
+                <h3>Cookie Settings</h3>
+                <button id="close-modal" class="close-modal">&times;</button>
+            </div>
+            <div class="cookie-modal-body">
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <h4>Essential Cookies</h4>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="essential-cookies" checked disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p>These cookies are necessary for the website to function and cannot be switched off.</p>
+                </div>
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <h4>Analytics Cookies</h4>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="analytics-cookies">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p>These cookies help us understand how visitors interact with our website.</p>
+                </div>
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <h4>Marketing Cookies</h4>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="marketing-cookies">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p>These cookies are used to track visitors across websites for advertising purposes.</p>
+                </div>
+            </div>
+            <div class="cookie-modal-footer">
+                <button id="save-preferences" class="cookie-btn cookie-accept">Save Preferences</button>
+                <button id="accept-all-modal" class="cookie-btn cookie-accept">Accept All</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
