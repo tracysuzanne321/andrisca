@@ -182,6 +182,11 @@ body {
     padding-top: 150px;
 }
 
+/* Mobile-optimized hero background image element */
+.hero-bg {
+    display: none;
+}
+
 .hero::before {
     content: '';
     position: absolute;
@@ -976,8 +981,33 @@ body {
     }
     
     .hero {
-        background-position: center top;
+        background: none;
         padding-top: 150px;
+    }
+
+    .hero-bg {
+        display: block;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        filter: brightness(0.75);
+    }
+
+    /* Improve background clarity on mobile - avoid iOS blur from fixed backgrounds */
+    .services {
+        background-attachment: scroll;
+        background-position: center;
+        background-size: cover;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+
+    .hero {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
     }
 
     .hero-title {
