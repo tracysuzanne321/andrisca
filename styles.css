@@ -182,10 +182,6 @@ body {
     padding-top: 150px;
 }
 
-/* Mobile-optimized hero background image element */
-.hero-bg {
-    display: none;
-}
 
 .hero::before {
     content: '';
@@ -981,19 +977,8 @@ body {
     }
     
     .hero {
-        background: none;
+        background-position: center top;
         padding-top: 150px;
-    }
-
-    .hero-bg {
-        display: block;
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 0;
-        filter: brightness(0.75);
     }
 
     /* Improve background clarity on mobile - avoid iOS blur from fixed backgrounds */
