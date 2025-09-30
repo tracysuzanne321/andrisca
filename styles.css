@@ -694,6 +694,12 @@ body {
     text-decoration: underline;
 }
 
+/* Allow long email to wrap within contact items */
+.contact-item a[href^="mailto:"] {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 .contact-item .fa-whatsapp {
     color: #25D366;
 }
@@ -746,8 +752,8 @@ body {
 
 .footer-content {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 2fr 0.9fr 1.1fr;
+    gap: 0rem;
     margin-bottom: 2rem;
 }
 
@@ -788,6 +794,14 @@ body {
     color: #a0aec0;
     line-height: 1.6;
     margin-bottom: 0.5rem;
+}
+
+/* Ensure long email addresses wrap nicely in the footer/contact text */
+.footer-section p a[href^="mailto:"] {
+    display: inline-block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .footer-section a {
