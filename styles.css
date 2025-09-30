@@ -141,6 +141,7 @@ body {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    z-index: 1001; /* Above sliding menu */
 }
 
 .bar {
@@ -149,6 +150,20 @@ body {
     background-color: #333;
     margin: 3px 0;
     transition: 0.3s;
+    transform-origin: center;
+}
+
+/* Hamburger to X animation */
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 /* Hero Section */
@@ -910,33 +925,15 @@ body {
 
     }
 
-    .nav-close {
-        display: block;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        margin: 0;
-    }
+    /* Removed dedicated close button */
 
-.nav-close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #333;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.nav-close-btn:hover {
-    background-color: #f0f0f0;
-    color: #5B7FA8;
-}
-
-/* Desktop - Hide close button */
+/* Desktop - Hide mobile elements */
 @media (min-width: 769px) {
     .nav-close {
+        display: none !important;
+    }
+    
+    .hamburger {
         display: none !important;
     }
 }
@@ -1307,14 +1304,6 @@ input:checked + .toggle-slider {
 input:checked + .toggle-slider:before {
     transform: translateX(26px);
 }
-
-    .nav-close {
-        display: block;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        margin: 0;
-    }
 
 input:disabled + .toggle-slider {
     background-color: #5B7FA8;
