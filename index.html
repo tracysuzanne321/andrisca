@@ -13,6 +13,29 @@
     <meta name="robots" content="index, follow">
     <meta name="author" content="Andrisca Property Services">
     <link rel="canonical" href="https://andriscapropertyservices.co.uk">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://andriscapropertyservices.co.uk">
+    <meta property="og:title" content="Andrisca Property Services - Shropshire Building & Renovation Experts">
+    <meta property="og:description" content="Professional building services in Shropshire. 35+ years experience in kitchens, bathrooms, garage conversions, extensions & general building work.">
+    <meta property="og:image" content="https://andriscapropertyservices.co.uk/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://andriscapropertyservices.co.uk">
+    <meta property="twitter:title" content="Andrisca Property Services - Shropshire Building & Renovation Experts">
+    <meta property="twitter:description" content="Professional building services in Shropshire. 35+ years experience in kitchens, bathrooms, garage conversions & extensions.">
+    <meta property="twitter:image" content="https://andriscapropertyservices.co.uk/og-image.jpg">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="aps-logo-transparent.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -20,6 +43,9 @@
     <!-- Slick Slider CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    
+    <!-- Plyr Video Player CSS -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     
     <!-- Structured Data for Local SEO -->
     <script type="application/ld+json">
@@ -175,61 +201,55 @@
             </div>
             <div class="video-grid">
                 <div class="video-item">
-                    <video controls preload="metadata" poster="Garage to Annex.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="Garage to Annex.png" playsinline>
                         <source src="Garage to Annex.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Garage to Annexe</h3>
                         <p>From bare brick to beautiful living space in the heart of Shropshire</p>
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls preload="metadata" poster="Orangrey.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="Orangrey.png" playsinline>
                         <source src="Orangry Extension.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Orangery Extension</h3>
                         <p>Bright, open-plan living designed for year-round comfort</p>
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls preload="metadata" poster="conservatory.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="conservatory.png" playsinline>
                         <source src="Conservatory.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Conservatory to Orangery</h3>
                         <p>Turning a draughty conservatory into a dream living space</p>
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls preload="metadata" poster="garage.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="garage.png" playsinline>
                         <source src="Garage.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Garage Conversion</h3>
                         <p>See how expert building work turns unused spaces into dream living areas.</p>
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls preload="metadata" poster="house.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="house.png" playsinline>
                         <source src="Andrisca.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Full House Renovation</h3>
                         <p>Extension, new kitchen and downstairs toilet – a full transformation inside and out.</p>
                     </div>
                 </div>
                 <div class="video-item">
-                    <video controls preload="metadata" poster="Bathroom.png" playsinline webkit-playsinline>
+                    <video class="plyr-video" poster="Bathroom.png" playsinline>
                         <source src="andrisca bathroom.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
                     </video>
-                    <div class="video-overlay">
+                    <div class="video-caption">
                         <h3>Bathroom Renovation</h3>
                         <p>A full rip-out and refit – turning a tired space into a sleek modern bathroom.</p>
                     </div>
@@ -672,6 +692,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Slick Slider JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <!-- Plyr Video Player JS -->
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
