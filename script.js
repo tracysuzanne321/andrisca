@@ -44,57 +44,57 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Contact form validation and submission with Netlify
 const contactForm = document.querySelector('.contact-form');
 
-contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(this);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const service = formData.get('service');
-    const message = formData.get('message');
-    
-    // Basic validation
-    if (!name || !email || !service || !message) {
-        showNotification('Please fill in all required fields.', 'error');
-        return;
-    }
-    
-    if (!isValidEmail(email)) {
-        showNotification('Please enter a valid email address.', 'error');
-        return;
-    }
-    
-    // Get submit button and disable it
-    const submitButton = this.querySelector('button[type="submit"]');
-    const originalButtonText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Sending...';
-    
-    // Submit to Netlify using fetch
-    fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
-    })
-    .then(response => {
-        if (response.ok) {
-            showNotification('Thank you for your message! We will get back to you soon.', 'success');
-            this.reset();
-        } else {
-            throw new Error('Form submission failed');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(this);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const service = formData.get('service');
+        const message = formData.get('message');
+        
+        // Basic validation
+        if (!name || !email || !service || !message) {
+            showNotification('Please fill in all required fields.', 'error');
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
-    })
-    .finally(() => {
-        // Re-enable submit button
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
+        
+        if (!isValidEmail(email)) {
+            showNotification('Please enter a valid email address.', 'error');
+            return;
+        }
+        
+        // Get submit button and disable it
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        // Submit to Netlify using fetch
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(formData).toString()
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to thank you page
+                window.location.href = '/thank-you.html';
+            } else {
+                throw new Error('Form submission failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        });
     });
-});
+}
 
 // Email validation function
 function isValidEmail(email) {
