@@ -366,7 +366,6 @@ body {
 }
 
 .video-item:hover {
-    transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
@@ -376,6 +375,11 @@ body {
     object-fit: cover;
     border-radius: 15px;
     background: #f0f0f0;
+    transition: transform 0.3s ease;
+}
+
+.video-item:hover video {
+    transform: scale(1.05);
 }
 
 /* Custom play button overlay */
@@ -404,7 +408,7 @@ body {
     opacity: var(--play-button-opacity, 1);
     visibility: var(--play-button-visibility, visible);
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 4px;
     pointer-events: none;
     cursor: pointer;
 }
