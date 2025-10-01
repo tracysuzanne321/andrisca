@@ -41,7 +41,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Contact form validation and submission
+// Contact form validation and submission with Netlify
 const contactForm = document.querySelector('.contact-form');
 
 contactForm.addEventListener('submit', function(e) {
@@ -51,7 +51,6 @@ contactForm.addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const name = formData.get('name');
     const email = formData.get('email');
-    const phone = formData.get('phone');
     const service = formData.get('service');
     const message = formData.get('message');
     
@@ -66,9 +65,35 @@ contactForm.addEventListener('submit', function(e) {
         return;
     }
     
-    // Simulate form submission
-    showNotification('Thank you for your message! We will get back to you soon.', 'success');
-    this.reset();
+    // Get submit button and disable it
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    
+    // Submit to Netlify using fetch
+    fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+    })
+    .then(response => {
+        if (response.ok) {
+            showNotification('Thank you for your message! We will get back to you soon.', 'success');
+            this.reset();
+        } else {
+            throw new Error('Form submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Sorry, there was an error sending your message. Please try again or contact us directly.', 'error');
+    })
+    .finally(() => {
+        // Re-enable submit button
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+    });
 });
 
 // Email validation function
@@ -296,45 +321,167 @@ if (document.readyState === 'loading') {
     lazyLoadImages();
 }
 
-// Video play button functionality
-document.querySelectorAll('.video-item').forEach(videoItem => {
-    const video = videoItem.querySelector('video');
-    const playButton = videoItem;
+// Enhanced Video Functionality for Mobile and Desktop
+(function() {
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     
-    // Hide play button when video starts playing
-    video.addEventListener('play', function() {
-        playButton.style.setProperty('--play-button-opacity', '0');
-        playButton.style.setProperty('--play-button-visibility', 'hidden');
+    // Ensure mobile inline playback
+    document.querySelectorAll('.video-item video').forEach(video => {
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.setAttribute('muted', 'false');
         
-        // Pause all other videos when this one starts playing
-        document.querySelectorAll('.video-item video').forEach(otherVideo => {
-            if (otherVideo !== video && !otherVideo.paused) {
-                otherVideo.pause();
-                // Show play button for paused video
-                const otherPlayButton = otherVideo.closest('.video-item');
-                otherPlayButton.style.setProperty('--play-button-opacity', '1');
-                otherPlayButton.style.setProperty('--play-button-visibility', 'visible');
+        // Preload metadata for better UX
+        video.preload = 'metadata';
+    });
+    
+    // Video interaction functionality
+    document.querySelectorAll('.video-item').forEach(videoItem => {
+        const video = videoItem.querySelector('video');
+        const overlay = videoItem.querySelector('.video-overlay');
+        let isUserInteracting = false;
+        
+        // Show/hide custom play button
+        function updatePlayButton(show) {
+            videoItem.style.setProperty('--play-button-opacity', show ? '1' : '0');
+            videoItem.style.setProperty('--play-button-visibility', show ? 'visible' : 'hidden');
+        }
+        
+        // Handle video play
+        video.addEventListener('play', function() {
+            updatePlayButton(false);
+            videoItem.classList.add('playing');
+            
+            // Pause all other videos
+            document.querySelectorAll('.video-item video').forEach(otherVideo => {
+                if (otherVideo !== video && !otherVideo.paused) {
+                    otherVideo.pause();
+                    const otherContainer = otherVideo.closest('.video-item');
+                    updatePlayButton.call({ style: { setProperty: (prop, val) => {
+                        otherContainer.style.setProperty(prop, val);
+                    }}}, true);
+                    otherContainer.classList.remove('playing');
+                }
+            });
+        });
+        
+        // Handle video pause
+        video.addEventListener('pause', function() {
+            if (!isUserInteracting && video.currentTime < video.duration - 0.1) {
+                updatePlayButton(true);
+                videoItem.classList.remove('playing');
             }
         });
+        
+        // Handle video end
+        video.addEventListener('ended', function() {
+            updatePlayButton(true);
+            videoItem.classList.remove('playing');
+            
+            // Reset video to beginning and show poster
+            setTimeout(() => {
+                video.pause();
+                video.currentTime = 0;
+                video.load();
+            }, 500);
+        });
+        
+        // Handle loading states
+        video.addEventListener('loadstart', function() {
+            videoItem.classList.add('loading');
+        });
+        
+        video.addEventListener('loadedmetadata', function() {
+            videoItem.classList.remove('loading');
+        });
+        
+        video.addEventListener('waiting', function() {
+            videoItem.classList.add('buffering');
+        });
+        
+        video.addEventListener('canplay', function() {
+            videoItem.classList.remove('buffering');
+        });
+        
+        // Click handler for play button overlay
+        videoItem.addEventListener('click', function(e) {
+            // Don't interfere with native video controls
+            const rect = video.getBoundingClientRect();
+            const clickY = e.clientY - rect.top;
+            const controlsHeight = 40; // Approximate height of video controls
+            
+            // If clicking on video controls area (bottom 40px), let native controls handle it
+            if (clickY > rect.height - controlsHeight && !video.paused) {
+                return;
+            }
+            
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (video.paused) {
+                isUserInteracting = true;
+                video.play().then(() => {
+                    isUserInteracting = false;
+                }).catch((error) => {
+                    console.log('Playback failed:', error);
+                    isUserInteracting = false;
+                    updatePlayButton(true);
+                });
+            } else {
+                video.pause();
+            }
+        });
+        
+        // Handle mobile-specific touch events
+        if (isMobile) {
+            let touchStartTime = 0;
+            
+            videoItem.addEventListener('touchstart', function(e) {
+                touchStartTime = Date.now();
+            }, { passive: true });
+            
+            videoItem.addEventListener('touchend', function(e) {
+                const touchDuration = Date.now() - touchStartTime;
+                
+                // If it's a quick tap (not a scroll), toggle play/pause
+                if (touchDuration < 200) {
+                    const rect = video.getBoundingClientRect();
+                    const touch = e.changedTouches[0];
+                    const clickY = touch.clientY - rect.top;
+                    const controlsHeight = 50;
+                    
+                    if (clickY <= rect.height - controlsHeight) {
+                        e.preventDefault();
+                        
+                        if (video.paused) {
+                            video.play().catch(console.error);
+                        } else {
+                            video.pause();
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Enhanced iOS handling
+        if (isIOS) {
+            // On iOS, sometimes videos don't show the poster after reset
+            video.addEventListener('pause', function() {
+                if (video.currentTime === 0) {
+                    video.load();
+                }
+            });
+        }
     });
     
-    // Show play button when video pauses or ends
-    video.addEventListener('pause', function() {
-        playButton.style.setProperty('--play-button-opacity', '1');
-        playButton.style.setProperty('--play-button-visibility', 'visible');
+    // Initialize all videos with proper state
+    document.querySelectorAll('.video-item').forEach(videoItem => {
+        videoItem.style.setProperty('--play-button-opacity', '1');
+        videoItem.style.setProperty('--play-button-visibility', 'visible');
     });
-    
-    video.addEventListener('ended', function() {
-        playButton.style.setProperty('--play-button-opacity', '1');
-        playButton.style.setProperty('--play-button-visibility', 'visible');
-    });
-    
-    // Click play button to play video
-    playButton.addEventListener('click', function(e) {
-        if (e.target === video) return; // Don't interfere with video controls
-        video.play();
-    });
-});
+})();
 
 // Cookie Banner Functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -443,5 +590,54 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add your analytics code here (Google Analytics, etc.)
         console.log('Analytics cookies accepted - loading tracking scripts');
         // Example: gtag('config', 'GA_MEASUREMENT_ID');
+    }
+});
+
+// Review Carousel using Slick Slider
+$(document).ready(function() {
+    $('.reviews-carousel').slick({
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        arrows: true,
+        prevArrow: '<button type="button" class="slick-prev"><i class="fas fa-chevron-left"></i></button>',
+        nextArrow: '<button type="button" class="slick-next"><i class="fas fa-chevron-right"></i></button>',
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        adaptiveHeight: true,
+        fade: true,
+        cssEase: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    arrows: true,
+                    dots: true
+                }
+            }
+        ]
+    });
+    
+    // Intersection Observer for animation
+    const reviewsSection = document.querySelector('.reviews');
+    if (reviewsSection) {
+        reviewsSection.style.opacity = '0';
+        reviewsSection.style.transform = 'translateY(30px)';
+        reviewsSection.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        
+        const reviewObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        reviewObserver.observe(reviewsSection);
     }
 });
