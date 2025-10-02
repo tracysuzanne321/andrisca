@@ -332,14 +332,26 @@ document.addEventListener('DOMContentLoaded', function() {
             clickToPlay: true,
             hideControls: true,
             resetOnEnd: true,
+            volume: 1,
+            storage: { enabled: true, key: 'plyr' },
             settings: [],
             speed: { selected: 1, options: [] },
             quality: { default: 'auto' }
         });
     });
     
-    // Pause all other videos when one starts playing
+    // Set initial volume and unmute on first play
     players.forEach((player, index) => {
+        player.volume = 1;
+        player.muted = false;
+        
+        // Unmute on first play
+        player.once('play', () => {
+            player.muted = false;
+            player.volume = 1;
+        });
+        
+        // Pause all other videos when one starts playing
         player.on('play', () => {
             players.forEach((otherPlayer, otherIndex) => {
                 if (otherIndex !== index && !otherPlayer.paused) {
