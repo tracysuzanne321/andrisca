@@ -338,7 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         return new Plyr(video, {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+            controls: isIOS 
+                ? ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen']
+                : ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume'], // No fullscreen on desktop
             ratio: '9:16',
             autoplay: false,
             muted: false,
@@ -351,11 +353,54 @@ document.addEventListener('DOMContentLoaded', function() {
             speed: { selected: 1, options: [] },
             quality: { default: 'auto' },
             fullscreen: { 
-                enabled: true, 
+                enabled: isIOS, // Only enable on iOS
                 fallback: true,
-                iosNative: isIOS // Use iOS native fullscreen on iPhone
-            }
+                iosNative: isIOS
+            },
+            displayDuration: false // Hide duration until played
         });
+    });
+    
+    // Create video modal for desktop
+    const videoModal = document.createElement('div');
+    videoModal.className = 'video-modal';
+    videoModal.innerHTML = `
+        <div class="video-modal-overlay"></div>
+        <div class="video-modal-content">
+            <button class="video-modal-close">&times;</button>
+            <div class="video-modal-player"></div>
+        </div>
+    `;
+    document.body.appendChild(videoModal);
+    
+    const modalOverlay = videoModal.querySelector('.video-modal-overlay');
+    const modalClose = videoModal.querySelector('.video-modal-close');
+    const modalPlayerContainer = videoModal.querySelector('.video-modal-player');
+    
+    function closeVideoModal() {
+        // Pause and remove the video in the modal
+        const modalVideo = modalPlayerContainer.querySelector('video');
+        if (modalVideo) {
+            modalVideo.pause();
+            modalVideo.currentTime = 0;
+        }
+        modalPlayerContainer.innerHTML = '';
+        
+        videoModal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Pause all players as well
+        players.forEach(p => p.pause());
+    }
+    
+    modalOverlay.addEventListener('click', closeVideoModal);
+    modalClose.addEventListener('click', closeVideoModal);
+    
+    // Escape key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+            closeVideoModal();
+        }
     });
     
     // Set initial volume and unmute on first play
@@ -390,6 +435,43 @@ document.addEventListener('DOMContentLoaded', function() {
             player.muted = false;
             player.volume = 1;
         });
+        
+        // Add expand icon and modal functionality for all devices
+        const videoContainer = player.elements.container.closest('.video-item');
+        if (videoContainer) {
+            // Create expand icon
+            const expandIcon = document.createElement('div');
+            expandIcon.className = 'video-expand-icon';
+            expandIcon.innerHTML = '<i class="fas fa-expand"></i>';
+            expandIcon.title = 'Expand video';
+            videoContainer.appendChild(expandIcon);
+            
+            // Function to open video in modal
+            const openVideoModal = (e) => {
+                if (e) e.preventDefault();
+                const videoClone = player.media.cloneNode(true);
+                videoClone.removeAttribute('class');
+                videoClone.className = 'modal-video-element';
+                videoClone.controls = true;
+                videoClone.currentTime = player.currentTime;
+                
+                modalPlayerContainer.innerHTML = '';
+                modalPlayerContainer.appendChild(videoClone);
+                videoModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                videoClone.play();
+                player.pause();
+            };
+            
+            // Click expand icon to open modal
+            expandIcon.addEventListener('click', openVideoModal);
+            
+            // Also keep double-click functionality on desktop
+            if (!isIOS) {
+                videoContainer.addEventListener('dblclick', openVideoModal);
+            }
+        }
         
         // Pause all other videos when one starts playing
         player.on('play', () => {
@@ -527,7 +609,7 @@ $(document).ready(function() {
         nextArrow: '<button type="button" class="slick-next"><i class="fas fa-chevron-right"></i></button>',
         pauseOnHover: true,
         pauseOnFocus: true,
-        adaptiveHeight: true,
+        adaptiveHeight: false,
         fade: true,
         cssEase: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         responsive: [
