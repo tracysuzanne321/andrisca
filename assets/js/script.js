@@ -323,7 +323,20 @@ if (document.readyState === 'loading') {
 
 // Initialize Plyr Video Players
 document.addEventListener('DOMContentLoaded', function() {
+    // Detect iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
     const players = Array.from(document.querySelectorAll('.plyr-video')).map(video => {
+        // Set video attributes before Plyr initializes
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        if (!isIOS) {
+            video.setAttribute('preload', 'metadata');
+        } else {
+            // On iOS, use 'none' to prevent auto-loading
+            video.setAttribute('preload', 'none');
+        }
+        
         return new Plyr(video, {
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
             ratio: '9:16',
@@ -336,7 +349,12 @@ document.addEventListener('DOMContentLoaded', function() {
             storage: { enabled: true, key: 'plyr' },
             settings: [],
             speed: { selected: 1, options: [] },
-            quality: { default: 'auto' }
+            quality: { default: 'auto' },
+            fullscreen: { 
+                enabled: true, 
+                fallback: true,
+                iosNative: isIOS // Use iOS native fullscreen on iPhone
+            }
         });
     });
     
@@ -344,6 +362,28 @@ document.addEventListener('DOMContentLoaded', function() {
     players.forEach((player, index) => {
         player.volume = 1;
         player.muted = false;
+        
+        // iOS-specific fixes
+        if (isIOS) {
+            // Prevent poster flicker on iOS
+            player.on('ready', () => {
+                const posterEl = player.elements.poster;
+                if (posterEl) {
+                    posterEl.style.transition = 'none';
+                }
+            });
+            
+            // Handle play event specifically for iOS
+            player.on('play', () => {
+                // Ensure video element stays in place
+                const videoEl = player.media;
+                if (videoEl) {
+                    videoEl.style.objectFit = 'cover';
+                    videoEl.style.width = '100%';
+                    videoEl.style.height = '100%';
+                }
+            });
+        }
         
         // Unmute on first play
         player.once('play', () => {

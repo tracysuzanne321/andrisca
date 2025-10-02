@@ -370,12 +370,42 @@ body {
     border-radius: 15px;
     overflow: hidden;
     aspect-ratio: 9/16;
+    position: relative;
 }
 
 .video-item .plyr video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: #000;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Prevent iOS video flicker and transition issues */
+.video-item .plyr video {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    will-change: auto;
+}
+
+/* Fix iOS video container */
+.video-item .plyr__video-wrapper {
+    background: #000;
+}
+
+/* Disable Plyr poster transition on iOS */
+@supports (-webkit-touch-callout: none) {
+    .plyr__poster {
+        transition: none !important;
+    }
+    
+    .plyr--loading .plyr__poster {
+        opacity: 0;
+        transition: none !important;
+    }
 }
 
 /* Video caption below the video */
